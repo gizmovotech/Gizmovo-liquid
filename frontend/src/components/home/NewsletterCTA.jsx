@@ -60,7 +60,7 @@ export default function NewsletterCTA() {
             type="submit"
             disabled={busy}
             data-testid="newsletter-cta-submit"
-            className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-cream px-5 text-sm font-semibold text-navy-900 transition-transform hover:scale-[1.03] disabled:opacity-50"
+            className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-gold px-5 text-sm font-semibold text-navy-900 transition-[transform,background-color] hover:bg-[#A67A3D] hover:scale-[1.03] disabled:opacity-50"
           >
             Join <ArrowRight className="h-4 w-4" />
           </button>

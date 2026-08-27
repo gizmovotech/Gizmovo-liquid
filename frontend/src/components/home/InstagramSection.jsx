@@ -13,7 +13,7 @@ const TILES = [
 
 export default function InstagramSection() {
   return (
-    <section className="bg-beige py-14 lg:py-20" data-testid="instagram-section">
+    <section className="bg-cream py-14 lg:py-20" data-testid="instagram-section">
       <div className="container-gizmo">
         <Reveal className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>

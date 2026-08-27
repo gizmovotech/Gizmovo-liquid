@@ -181,7 +181,7 @@ export default function CartDrawer() {
                               disabled={addingId === p.id}
                               data-testid={`upsell-add-${p.slug}`}
                               aria-label={`Add ${p.name} to bag`}
-                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-navy-900/20 text-navy-900 transition-colors hover:bg-navy-900 hover:text-cream disabled:opacity-50"
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-navy-900/20 text-navy-900 transition-colors hover:border-gold hover:bg-gold hover:text-navy-900 disabled:opacity-50"
                             >
                               <Plus className="h-4 w-4" />
                             </button>

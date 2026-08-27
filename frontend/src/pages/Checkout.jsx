@@ -78,7 +78,7 @@ export default function Checkout() {
                   onChange={update(f.k)}
                   placeholder={f.ph}
                   data-testid={`checkout-${f.k}`}
-                  className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm focus:border-navy-900 focus:outline-none"
+                  className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm placeholder:text-navy-900/50 focus:border-navy-900 focus:outline-none"
                 />
               </div>
             ))}

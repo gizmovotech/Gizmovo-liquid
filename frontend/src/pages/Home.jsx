@@ -58,8 +58,8 @@ export default function Home() {
       <InstagramSection />
 
       {/* FAQ */}
-      <section className="container-gizmo py-14 lg:py-20" data-testid="home-faq">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+      <section className="bg-beige py-14 lg:py-20" data-testid="home-faq">
+        <div className="container-gizmo grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
           <Reveal>
             <p className="overline">Good to know</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">

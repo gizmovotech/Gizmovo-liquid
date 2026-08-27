@@ -10,7 +10,7 @@ const ease = [0.22, 1, 0.36, 1];
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-cream" data-testid="hero">
+    <section className="relative overflow-hidden bg-navy-900" data-testid="hero">
       <div className="container-gizmo grid items-center gap-10 py-12 lg:grid-cols-2 lg:gap-8 lg:py-20">
         {/* Copy */}
         <div className="order-2 max-w-xl lg:order-1">
@@ -18,7 +18,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease }}
-            className="inline-flex items-center gap-2 rounded-full border border-navy-900/15 bg-white px-3.5 py-1.5 text-xs font-medium text-navy-900/70"
+            className="inline-flex items-center gap-2 rounded-full border border-cream/20 bg-cream/5 px-3.5 py-1.5 text-xs font-medium text-cream/80"
           >
             <Sparkles className="h-3.5 w-3.5 text-gold" />
             Curated gadgets, not a catalog
@@ -28,7 +28,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.08, ease }}
-            className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-navy-900 text-balance sm:text-5xl lg:text-6xl"
+            className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-cream text-balance sm:text-5xl lg:text-6xl"
           >
             Little upgrades.
             <br />
@@ -39,7 +39,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.16, ease }}
-            className="mt-5 max-w-md text-base leading-relaxed text-navy-900/65 sm:text-lg"
+            className="mt-5 max-w-md text-base leading-relaxed text-cream/70 sm:text-lg"
           >
             Genuinely useful things you'll wonder how you lived without —
             hand-picked, honestly priced, and shipped free across India.
@@ -51,10 +51,10 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.24, ease }}
             className="mt-8 flex flex-wrap items-center gap-3"
           >
-            <Link to="/shop?filter=best" className="btn-primary" data-testid="hero-primary-cta">
+            <Link to="/shop?filter=best" className="btn-gold" data-testid="hero-primary-cta">
               Shop best sellers <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/shop" className="btn-secondary" data-testid="hero-secondary-cta">
+            <Link to="/shop" className="btn-outline-light" data-testid="hero-secondary-cta">
               Explore all
             </Link>
           </motion.div>
@@ -63,7 +63,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-9 flex items-center gap-6 text-sm text-navy-900/60"
+            className="mt-9 flex items-center gap-6 text-sm text-cream/70"
           >
             <span className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-gold" /> Free shipping

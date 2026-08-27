@@ -120,7 +120,7 @@ export default function ProductDetail() {
           <div className="flex flex-wrap items-center gap-2">
             <p className="overline">{product.category}</p>
             {product.badge && (
-              <span className="rounded-full bg-navy-900 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cream">
+              <span data-testid="pdp-badge" className="rounded-full bg-gold px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-navy-900">
                 {product.badge}
               </span>
             )}

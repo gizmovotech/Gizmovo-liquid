@@ -89,7 +89,7 @@ export default function Footer() {
                   type="submit"
                   disabled={busy}
                   data-testid="footer-newsletter-submit"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream text-navy-900 transition-transform hover:scale-105 disabled:opacity-50"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold text-navy-900 transition-transform hover:scale-105 disabled:opacity-50"
                   aria-label="Subscribe"
                 >
                   <ArrowRight className="h-4 w-4" />

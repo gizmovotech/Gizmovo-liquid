@@ -64,8 +64,14 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-full bg-navy-900 px-7 py-3.5 text-sm font-semibold tracking-wide text-cream transition-colors duration-300 hover:bg-navy-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2 disabled:opacity-50;
   }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-semibold tracking-wide text-navy-900 transition-colors duration-300 hover:bg-[#A67A3D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900 disabled:opacity-50;
+  }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-navy-900/25 bg-transparent px-7 py-3.5 text-sm font-semibold tracking-wide text-navy-900 transition-colors duration-300 hover:border-navy-900 hover:bg-navy-900 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-navy-900/25 bg-transparent px-7 py-3.5 text-sm font-semibold tracking-wide text-navy-900 transition-colors duration-300 hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2;
+  }
+  .btn-outline-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-cream/30 bg-transparent px-7 py-3.5 text-sm font-semibold tracking-wide text-cream transition-colors duration-300 hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900;
   }
   .overline {
     @apply text-xs font-semibold uppercase tracking-[0.2em] text-gold;

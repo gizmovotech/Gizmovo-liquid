@@ -67,7 +67,7 @@ export default function Contact() {
                   <input
                     id="c-name" required value={form.name} onChange={update("name")}
                     data-testid="contact-name"
-                    className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm focus:border-navy-900 focus:outline-none"
+                    className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm placeholder:text-navy-900/50 focus:border-navy-900 focus:outline-none"
                     placeholder="Your name"
                   />
                 </div>
@@ -76,7 +76,7 @@ export default function Contact() {
                   <input
                     id="c-email" type="email" required value={form.email} onChange={update("email")}
                     data-testid="contact-email"
-                    className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm focus:border-navy-900 focus:outline-none"
+                    className="mt-2 w-full rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm placeholder:text-navy-900/50 focus:border-navy-900 focus:outline-none"
                     placeholder="you@email.com"
                   />
                 </div>
@@ -86,7 +86,7 @@ export default function Contact() {
                 <textarea
                   id="c-msg" required rows={6} value={form.message} onChange={update("message")}
                   data-testid="contact-message"
-                  className="mt-2 w-full resize-none rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm focus:border-navy-900 focus:outline-none"
+                  className="mt-2 w-full resize-none rounded-2xl border border-navy-900/15 bg-white px-4 py-3 text-sm placeholder:text-navy-900/50 focus:border-navy-900 focus:outline-none"
                   placeholder="How can we help?"
                 />
               </div>

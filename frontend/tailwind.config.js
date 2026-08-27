@@ -14,7 +14,7 @@ module.exports = {
           800: '#102A43',
           600: '#173B5E',
         },
-        beige: '#F4EBDD',
+        beige: '#ECDBC0',
         cream: '#FBF7EE',
         'soft-beige': '#E5D9C7',
         gold: '#B88A4A',

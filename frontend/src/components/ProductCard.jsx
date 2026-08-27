@@ -53,13 +53,16 @@ export default function ProductCard({ product, index = 0 }) {
               {product.badge && (
                 <span
                   data-testid={`badge-${product.slug}`}
-                  className="rounded-full bg-navy-900 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-cream"
+                  className="rounded-full bg-gold px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-navy-900"
                 >
                   {product.badge}
                 </span>
               )}
               {saving > 0 && (
-                <span className="rounded-full bg-gold px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                <span
+                  data-testid={`save-badge-${product.slug}`}
+                  className="rounded-full bg-navy-900 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-cream"
+                >
                   Save {saving}%
                 </span>
               )}
