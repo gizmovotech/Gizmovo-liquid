@@ -1,0 +1,41 @@
+{%- comment -%}
+  Product card. Params: card_product (product), badge (string, optional)
+{%- endcomment -%}
+<div class="product-card">
+  <a href="{{ card_product.url }}" class="product-card__link">
+    <div class="product-card__media">
+      {%- if badge != blank -%}
+        <span class="badge">{{ badge }}</span>
+      {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+        <span class="badge">{{ 'products.product.on_sale' | t }}</span>
+      {%- endif -%}
+      {%- if card_product.featured_media -%}
+        <img
+          src="{{ card_product.featured_media | image_url: width: 600 }}"
+          srcset="{{ card_product.featured_media | image_url: width: 400 }} 400w, {{ card_product.featured_media | image_url: width: 600 }} 600w, {{ card_product.featured_media | image_url: width: 900 }} 900w"
+          sizes="(min-width: 990px) 24vw, (min-width: 750px) 30vw, 50vw"
+          alt="{{ card_product.featured_media.alt | escape | default: card_product.title }}"
+          width="600" height="600" loading="lazy">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="product-card__info">
+      <h3 class="product-card__title">{{ card_product.title }}</h3>
+      <div class="product-card__price">
+        {%- if card_product.compare_at_price > card_product.price -%}
+          <span class="price price--sale">{{ card_product.price | money }}</span>
+          <s class="price__compare">{{ card_product.compare_at_price | money }}</s>
+        {%- else -%}
+          <span class="price">{{ card_product.price | money }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+  <form method="post" action="{{ routes.cart_add_url }}" class="product-card__form" data-cart-form>
+    <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+    <button type="submit" class="btn btn--card" data-add-to-cart {% unless card_product.available %}disabled{% endunless %}>
+      {%- if card_product.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+    </button>
+  </form>
+</div>

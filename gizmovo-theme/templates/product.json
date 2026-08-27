@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": { "type": "main-product" },
+    "related": {
+      "type": "product-rail",
+      "settings": { "heading": "You might also like", "limit": 6, "show_view_all": false }
+    }
+  },
+  "order": ["main", "related"]
+}

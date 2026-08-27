@@ -1,0 +1,66 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "search": {
+      "heading": "Search",
+      "placeholder": "Search products",
+      "submit": "Search",
+      "no_results": "No results for \"{{ terms }}\".",
+      "results_with_count": "{{ count }} results"
+    },
+    "newsletter": {
+      "success": "Thanks. You are on the list."
+    },
+    "404": {
+      "title": "Page not found",
+      "link": "Continue shopping"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "on_sale": "Sale",
+      "from_price_html": "From {{ price }}"
+    }
+  },
+  "collections": {
+    "general": {
+      "sort_by_label": "Sort by",
+      "filter_by": "Filter",
+      "no_matches": "No products match these filters.",
+      "clear": "Clear all",
+      "apply": "Apply"
+    },
+    "sorting": {
+      "featured": "Featured",
+      "best_selling": "Best selling",
+      "az": "A–Z",
+      "za": "Z–A",
+      "price_ascending": "Price, low to high",
+      "price_descending": "Price, high to low",
+      "date_descending": "Newest",
+      "date_ascending": "Oldest"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Your cart",
+      "empty": "Your cart is empty.",
+      "continue": "Continue shopping",
+      "subtotal": "Subtotal",
+      "checkout": "Checkout",
+      "remove": "Remove",
+      "taxes_note": "Shipping and taxes calculated at checkout."
+    }
+  }
+}

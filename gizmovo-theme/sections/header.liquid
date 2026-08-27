@@ -1,0 +1,77 @@
+<div class="header-outer">
+  <header id="Header" class="header{% if section.settings.transparent_on_home and template.name == 'index' %} header--transparent{% endif %}">
+    <div class="page-width">
+      <div class="header__inner">
+        <button type="button" class="icon-btn header__menu-toggle" data-open="MobileNav" aria-label="Open menu">
+          {% render 'icon', name: 'menu' %}
+        </button>
+
+        <nav class="header__nav" aria-label="Primary">
+          {%- for link in section.settings.menu.links -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        </nav>
+
+        <a href="{{ routes.root_url }}" class="header__wordmark">{{ section.settings.wordmark | default: shop.name }}</a>
+
+        <div class="header__actions">
+          <button type="button" class="icon-btn" data-open="SearchOverlay" aria-label="Search">
+            {% render 'icon', name: 'search' %}
+          </button>
+          <button type="button" class="icon-btn" data-open="CartDrawer" aria-label="Cart">
+            {% render 'icon', name: 'cart' %}
+            <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+{%- comment -%} MOBILE NAV OVERLAY {%- endcomment -%}
+<div id="MobileNav" class="overlay" aria-hidden="true" role="dialog" aria-label="Menu">
+  <div class="overlay__backdrop" data-close></div>
+  <div class="mobile-nav">
+    <div class="mobile-nav__head">
+      <span class="header__wordmark">{{ section.settings.wordmark | default: shop.name }}</span>
+      <button type="button" class="icon-btn" data-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <nav class="mobile-nav__links" aria-label="Mobile">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+    <div class="mobile-nav__foot">
+      <p>{{ section.settings.menu_footer_text }}</p>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} SEARCH OVERLAY {%- endcomment -%}
+<div id="SearchOverlay" class="overlay search-overlay" aria-hidden="true" role="dialog" aria-label="Search">
+  <div class="overlay__backdrop" data-close></div>
+  <div class="search-panel">
+    <div class="page-width">
+      <div class="search-panel__inner">
+        <form action="{{ routes.search_url }}" method="get" class="search-form" role="search">
+          <input type="hidden" name="type" value="product">
+          {% render 'icon', name: 'search' %}
+          <input type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" autocomplete="off" aria-label="Search">
+          <button type="button" class="icon-btn" data-close aria-label="Close search">{% render 'icon', name: 'close' %}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "text", "id": "wordmark", "label": "Wordmark text", "default": "Gizmovo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "transparent_on_home", "label": "Transparent over hero on homepage", "default": true },
+    { "type": "text", "id": "menu_footer_text", "label": "Menu footer text", "default": "Free shipping across India." }
+  ]
+}
+{% endschema %}

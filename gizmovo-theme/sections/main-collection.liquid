@@ -1,0 +1,91 @@
+<div class="page-width">
+  <div class="coll-head">
+    <h1 class="coll-head__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="coll-head__desc rte">{{ collection.description | strip_html | truncatewords: 30 }}</div>
+    {%- endif -%}
+  </div>
+
+  <form id="CollFilters" method="get">
+    <div class="coll-toolbar">
+      <div class="facets">
+        {%- for filter in collection.filters -%}
+          <details class="facet-group">
+            <summary>{{ filter.label }} {% render 'icon', name: 'arrow-right' %}</summary>
+            <div class="facet-group__panel">
+              {%- if filter.type == 'price_range' -%}
+                <div class="price-range">
+                  <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="Min" min="0">
+                  <span>to</span>
+                  <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="Max">
+                </div>
+                <button type="submit" class="btn btn--card" style="margin-top:12px">{{ 'collections.general.apply' | t }}</button>
+              {%- else -%}
+                {%- for value in filter.values -%}
+                  <label>
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()">
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+
+      <div class="facets">
+        <span class="coll-toolbar__count">{{ collection.products_count }} products</span>
+        <select name="sort_by" onchange="this.form.submit()" aria-label="{{ 'collections.general.sort_by_label' | t }}">
+          {%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
+          <option value="manual" {% if sort == 'manual' %}selected{% endif %}>{{ 'collections.sorting.featured' | t }}</option>
+          <option value="best-selling" {% if sort == 'best-selling' %}selected{% endif %}>{{ 'collections.sorting.best_selling' | t }}</option>
+          <option value="title-ascending" {% if sort == 'title-ascending' %}selected{% endif %}>{{ 'collections.sorting.az' | t }}</option>
+          <option value="price-ascending" {% if sort == 'price-ascending' %}selected{% endif %}>{{ 'collections.sorting.price_ascending' | t }}</option>
+          <option value="price-descending" {% if sort == 'price-descending' %}selected{% endif %}>{{ 'collections.sorting.price_descending' | t }}</option>
+          <option value="created-descending" {% if sort == 'created-descending' %}selected{% endif %}>{{ 'collections.sorting.date_descending' | t }}</option>
+        </select>
+      </div>
+    </div>
+
+    {%- if collection.active_values.size > 0 -%}
+      <div class="active-filters">
+        {%- for value in collection.active_values -%}
+          <a class="active-filter" href="{{ value.url_to_remove }}">{{ value.label }} {% render 'icon', name: 'close' %}</a>
+        {%- endfor -%}
+        <a class="active-filter" href="{{ collection.url }}">{{ 'collections.general.clear' | t }}</a>
+      </div>
+    {%- endif -%}
+  </form>
+</div>
+
+<div class="page-width" style="padding-bottom:80px">
+  {%- if collection.products.size > 0 -%}
+    {%- paginate collection.products by section.settings.per_page -%}
+      <div class="product-grid">
+        {%- for product in collection.products -%}
+          {% render 'product-card', card_product: product %}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <div style="display:flex; gap:14px; justify-content:center; margin-top:50px;">
+          {%- if paginate.previous -%}<a class="text-link" href="{{ paginate.previous.url }}">{{ 'general.pagination.previous' | t }}</a>{%- endif -%}
+          {%- if paginate.next -%}<a class="text-link" href="{{ paginate.next.url }}">{{ 'general.pagination.next' | t }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="empty-state">
+      <h2>{{ 'collections.general.no_matches' | t }}</h2>
+      <a class="text-link" href="{{ collection.url }}">{{ 'collections.general.clear' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "min": 8, "max": 24, "step": 4, "label": "Products per page", "default": 16 }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+<div class="page-width section">
+  <h1 class="coll-head__title">{{ 'general.search.heading' | t }}</h1>
+  <form action="{{ routes.search_url }}" method="get" class="search-form" style="margin:24px 0 10px;max-width:640px">
+    <input type="hidden" name="type" value="product">
+    {% render 'icon', name: 'search' %}
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="Search">
+  </form>
+
+  {%- if search.performed -%}
+    {%- if search.results.size > 0 -%}
+      <p class="coll-toolbar__count" style="margin:24px 0">{{ 'general.search.results_with_count' | t: count: search.results_count }}</p>
+      <div class="product-grid search-results__grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {% render 'product-card', card_product: item %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="empty-state">
+        <h2>{{ 'general.search.no_results' | t: terms: search.terms }}</h2>
+        <a class="text-link" href="{{ routes.all_products_collection_url }}">{{ 'cart.general.continue' | t }}</a>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

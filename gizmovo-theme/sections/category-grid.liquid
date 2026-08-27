@@ -1,0 +1,59 @@
+<section class="section">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="section-head">
+        <h2 class="section-head__title">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="cat-grid cat-grid--{{ section.blocks.size }}">
+      {%- for block in section.blocks -%}
+        {%- assign img = block.settings.image -%}
+        <a href="{{ block.settings.link }}" class="cat-tile" {{ block.shopify_attributes }}>
+          {%- if img -%}
+            <img src="{{ img | image_url: width: 700 }}" srcset="{{ img | image_url: width: 500 }} 500w, {{ img | image_url: width: 700 }} 700w" sizes="(min-width:990px) 25vw, 50vw" alt="{{ block.settings.label }}" width="700" height="875" loading="lazy">
+          {%- elsif block.settings.fallback_url != blank -%}
+            <img src="{{ block.settings.fallback_url }}" alt="{{ block.settings.label }}" width="700" height="875" loading="lazy">
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}
+          {%- endif -%}
+          <span class="cat-tile__overlay"></span>
+          <span class="cat-tile__label">{{ block.settings.label }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Category grid",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by category" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "fallback_url", "label": "Fallback image URL", "info": "Used only if no image is uploaded." },
+        { "type": "text", "id": "label", "label": "Label", "default": "Category" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Category grid",
+      "blocks": [
+        { "type": "category", "settings": { "label": "Charging", "fallback_url": "https://images.unsplash.com/photo-1572721546624-05bf65ad7679?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        { "type": "category", "settings": { "label": "Audio", "fallback_url": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        { "type": "category", "settings": { "label": "Home & Desk", "fallback_url": "https://images.unsplash.com/photo-1595303526913-c7037797ebe7?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        { "type": "category", "settings": { "label": "On-the-go", "fallback_url": "https://images.pexels.com/photos/6088772/pexels-photo-6088772.jpeg?auto=compress&cs=tinysrgb&h=875&w=700" } },
+        { "type": "category", "settings": { "label": "Everyday Carry", "fallback_url": "https://images.unsplash.com/photo-1523976246010-56d9a0d2ee66?w=700&q=85" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

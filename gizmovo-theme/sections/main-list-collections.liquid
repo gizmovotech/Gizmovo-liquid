@@ -1,0 +1,20 @@
+<div class="page-width section">
+  <h1 class="coll-head__title" style="margin-bottom:30px">{{ section.settings.heading | default: 'Collections' }}</h1>
+  <div class="cat-grid cat-grid--{{ collections.size }}">
+    {%- for collection in collections -%}
+      <a href="{{ collection.url }}" class="cat-tile">
+        {%- if collection.featured_image -%}
+          <img src="{{ collection.featured_image | image_url: width: 700 }}" alt="{{ collection.title }}" width="700" height="875" loading="lazy">
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}
+        {%- endif -%}
+        <span class="cat-tile__overlay"></span>
+        <span class="cat-tile__label">{{ collection.title }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "List collections", "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Shop all categories" } ] }
+{% endschema %}

@@ -1,0 +1,47 @@
+<section class="section section--tight section--neutral">
+  <div class="page-width">
+    <div class="trust">
+      {%- for block in section.blocks -%}
+        <div class="trust__item" {{ block.shopify_attributes }}>
+          {% render 'icon', name: block.settings.icon %}
+          <span class="trust__label">{{ block.settings.label }}</span>
+          {%- if block.settings.sub != blank -%}<span class="trust__sub">{{ block.settings.sub }}</span>{%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust strip",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "truck", "options": [
+          { "value": "truck", "label": "Shipping" },
+          { "value": "refresh", "label": "Returns" },
+          { "value": "lock", "label": "Secure" },
+          { "value": "chat", "label": "Support" }
+        ] },
+        { "type": "text", "id": "label", "label": "Label", "default": "Free shipping" },
+        { "type": "text", "id": "sub", "label": "Sub text", "default": "On every order." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Trust strip",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "truck", "label": "Free shipping", "sub": "On every order." } },
+        { "type": "item", "settings": { "icon": "refresh", "label": "Easy returns", "sub": "7 days, no questions." } },
+        { "type": "item", "settings": { "icon": "lock", "label": "Secure checkout", "sub": "UPI, cards, netbanking." } },
+        { "type": "item", "settings": { "icon": "chat", "label": "Real support", "sub": "We actually reply." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

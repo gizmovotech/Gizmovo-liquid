@@ -1,0 +1,23 @@
+{
+  "current": {
+    "color_bg": "#F7F5F1",
+    "color_text": "#1A1A18",
+    "color_neutral": "#ECE9E3",
+    "color_accent": "#C75B39",
+    "color_accent_hover": "#A9481F",
+    "page_width": 1360,
+    "social_instagram": "",
+    "social_twitter": "",
+    "social_youtube": ""
+  },
+  "presets": {
+    "Gizmovo": {
+      "color_bg": "#F7F5F1",
+      "color_text": "#1A1A18",
+      "color_neutral": "#ECE9E3",
+      "color_accent": "#C75B39",
+      "color_accent_hover": "#A9481F",
+      "page_width": 1360
+    }
+  }
+}

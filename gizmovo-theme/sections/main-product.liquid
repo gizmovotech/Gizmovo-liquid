@@ -1,0 +1,100 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<section class="section" data-product>
+  <div class="page-width">
+    <div class="product">
+      {%- comment -%} GALLERY {%- endcomment -%}
+      <div class="gallery" data-gallery>
+        <div class="gallery__main">
+          {%- if product.featured_media -%}
+            <img data-gallery-main src="{{ current_variant.featured_media | default: product.featured_media | image_url: width: 1200 }}" alt="{{ product.featured_media.alt | escape | default: product.title }}" width="1200" height="1200">
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+          {%- endif -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="gallery__thumbs">
+            {%- for media in product.media -%}
+              <button type="button" class="gallery__thumb{% if forloop.first %} is-active{% endif %}" data-gallery-thumb data-media-id="{{ media.id }}" data-full="{{ media | image_url: width: 1200 }}" aria-label="View image {{ forloop.index }}">
+                <img src="{{ media | image_url: width: 160 }}" alt="" width="160" height="160" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} INFO {%- endcomment -%}
+      <div class="product-info">
+        {%- if product.vendor != blank -%}<p class="eyebrow">{{ product.vendor }}</p>{%- endif -%}
+        <h1 class="product-info__title">{{ product.title }}</h1>
+
+        <div class="product-info__price" data-product-price>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="price price--sale">{{ current_variant.price | money }}</span>
+            <s class="price__compare">{{ current_variant.compare_at_price | money }}</s>
+          {%- else -%}
+            <span class="price">{{ current_variant.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <form method="post" action="{{ routes.cart_add_url }}" data-product-form>
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="option" data-option-index="{{ forloop.index0 }}">
+                <span class="option__label">{{ option.name }}</span>
+                <div class="option__values">
+                  {%- for value in option.values -%}
+                    {%- assign id = 'opt-' | append: forloop.index0 | append: '-' | append: forloop.index -%}
+                    <input type="radio" id="{{ id }}-{{ option.position }}" name="option-{{ option.position }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                    <label for="{{ id }}-{{ option.position }}">{{ value }}</label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <div class="product-form__row">
+            <span class="qty">
+              <button type="button" data-qty-btn="minus" aria-label="Decrease">−</button>
+              <input type="text" inputmode="numeric" name="quantity" value="1" min="1" aria-label="{{ 'products.product.quantity' | t }}">
+              <button type="button" data-qty-btn="plus" aria-label="Increase">+</button>
+            </span>
+          </div>
+
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+          <button type="submit" class="btn btn--full" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}>
+            {%- if current_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+          </button>
+        </form>
+
+        <div class="product-trust">
+          <span class="product-trust__item">{% render 'icon', name: 'lock' %} Secure checkout</span>
+          <span class="product-trust__item">{% render 'icon', name: 'refresh' %} 7-day returns</span>
+          <span class="product-trust__item">{% render 'icon', name: 'truck' %} Free shipping</span>
+        </div>
+
+        {%- if product.description != blank -%}
+          <div class="product-desc rte">{{ product.description }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-variants-json>
+  [
+    {%- for v in product.variants -%}
+    {
+      "id": {{ v.id }},
+      "options": {{ v.options | json }},
+      "price": {{ v.price }},
+      "compare_at_price": {{ v.compare_at_price | default: 0 | json }},
+      "available": {{ v.available }},
+      "featured_media": {% if v.featured_media %}{ "id": {{ v.featured_media.id }} }{% else %}null{% endif %}
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+  </script>
+</section>
+
+{% schema %}
+{ "name": "Product", "settings": [] }
+{% endschema %}

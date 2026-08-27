@@ -1,0 +1,38 @@
+{%- assign fallback = 'https://images.unsplash.com/photo-1588098957555-a80b10359981?w=1200&q=85' -%}
+<section class="section">
+  <div class="page-width">
+    <div class="editorial{% if section.settings.flip %} editorial--flip{% endif %}">
+      <div class="editorial__media">
+        {%- if section.settings.image -%}
+          <img src="{{ section.settings.image | image_url: width: 1200 }}" srcset="{{ section.settings.image | image_url: width: 700 }} 700w, {{ section.settings.image | image_url: width: 1200 }} 1200w" sizes="(min-width:750px) 55vw, 100vw" alt="{{ section.settings.image.alt | escape | default: section.settings.heading }}" width="1200" height="900" loading="lazy">
+        {%- else -%}
+          <img src="{{ fallback }}" alt="{{ section.settings.heading }}" width="1200" height="900" loading="lazy">
+        {%- endif -%}
+      </div>
+      <div class="editorial__body-wrap">
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="editorial__title">{{ section.settings.heading }}</h2>
+        <div class="editorial__body">{{ section.settings.text }}</div>
+        {%- if section.settings.button_label != blank -%}
+          <p style="margin-top:26px"><a href="{{ section.settings.button_link }}" class="text-link">{{ section.settings.button_label }}</a></p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "flip", "label": "Image on right", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Gizmovo" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Less clutter. Better gear." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We test everything ourselves and only stock what earns a place in your bag. No filler, no noise, no marketing gimmicks. Just accessories that quietly do their job.</p>" },
+    { "type": "text", "id": "button_label", "label": "Link label", "default": "Read our story" },
+    { "type": "url", "id": "button_link", "label": "Link URL" }
+  ],
+  "presets": [{ "name": "Editorial" }]
+}
+{% endschema %}

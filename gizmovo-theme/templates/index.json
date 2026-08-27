@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "New season",
+        "heading": "Gear that keeps up.",
+        "text": "Charging, audio and carry essentials, chosen carefully and built to last.",
+        "button_label": "Shop the range",
+        "button_link": "shopify://collections/all",
+        "link_label": "See best sellers"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "settings": { "heading": "Shop by category" },
+      "blocks": {
+        "c1": { "type": "category", "settings": { "label": "Charging", "fallback_url": "https://images.unsplash.com/photo-1572721546624-05bf65ad7679?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        "c2": { "type": "category", "settings": { "label": "Audio", "fallback_url": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        "c3": { "type": "category", "settings": { "label": "Home & Desk", "fallback_url": "https://images.unsplash.com/photo-1595303526913-c7037797ebe7?crop=entropy&cs=srgb&fm=jpg&w=700&q=85" } },
+        "c4": { "type": "category", "settings": { "label": "On-the-go", "fallback_url": "https://images.pexels.com/photos/6088772/pexels-photo-6088772.jpeg?auto=compress&cs=tinysrgb&h=875&w=700" } },
+        "c5": { "type": "category", "settings": { "label": "Everyday Carry", "fallback_url": "https://images.unsplash.com/photo-1523976246010-56d9a0d2ee66?w=700&q=85" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"]
+    },
+    "best-sellers": {
+      "type": "product-rail",
+      "settings": { "heading": "Best sellers", "badge": "Best seller", "limit": 8, "show_view_all": true }
+    },
+    "editorial": {
+      "type": "editorial",
+      "settings": {
+        "eyebrow": "Why Gizmovo",
+        "heading": "Less clutter. Better gear.",
+        "text": "<p>We test everything ourselves and only stock what earns a place in your bag. No filler, no noise, no marketing gimmicks. Just accessories that quietly do their job.</p>",
+        "button_label": "Read our story"
+      }
+    },
+    "new-arrivals": {
+      "type": "product-rail",
+      "settings": { "heading": "New arrivals", "badge": "New", "limit": 8, "show_view_all": true, "neutral_bg": true }
+    },
+    "trust": { "type": "trust-strip" },
+    "newsletter": { "type": "newsletter" }
+  },
+  "order": ["hero", "categories", "best-sellers", "editorial", "new-arrivals", "trust", "newsletter"]
+}
