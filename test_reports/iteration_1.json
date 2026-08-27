@@ -1,0 +1,106 @@
+{
+  "summary": "Full e2e test of GIZMOVO storefront (backend + frontend). Backend: 47 pytest cases across catalog, predictive search, cart lifecycle, newsletter, contact, checkout and remote image assets — 43 passed (91%). Frontend: verified homepage, shop filters/sort, PDP (gallery, variants, qty max-5, add-to-bag, buy-it-now), cart drawer, cart page, search overlay, full checkout -> order confirmation, contact, newsletter, About/FAQ/404, and mobile (390px) layout. The complete guest purchase flow works end-to-end (order GZ2608275BC906 created, cart cleared). One HIGH bug found: unescaped user input passed to MongoDB $regex causes a 500 and an uncaught frontend runtime error when a shopper types a regex metacharacter (e.g. '(') into search.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "GET /api/search?q= and GET /api/products?search=",
+        "issue": "User input is interpolated directly into MongoDB $regex without escaping. Any regex metacharacter ('(', '[', '*', '+', '\\\\') raises pymongo OperationFailure 'Regular expression is invalid' -> HTTP 500. Reproduced in UI: typing '(' in the search overlay triggers a CRA 'Uncaught runtime errors' overlay (AxiosError 500) and search silently dies. Fix: wrap with re.escape(q) in get_products() (server.py:132-137) and predictive_search() (server.py:179-185).",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "GET /api/orders/{order_no}",
+        "issue": "Endpoint does not exist (404). OrderConfirmation.jsx reads the order only from react-router location.state, so a direct link / new tab / shared URL to /order/{orderNo} renders the order number but no order summary. Add a GET order endpoint and fetch as fallback when state is absent."
+      },
+      {
+        "endpoint": "POST /api/contact",
+        "issue": "Accepts empty strings for name and message (returns 200). ContactIn has no min_length constraint, so blank submissions are persisted. Add min_length=1 (or 2) to name/message."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "ProductRail (home/ProductRail.jsx)",
+        "issue": "Duplicate data-testid values on the homepage. The mobile horizontal rail (sm:hidden) and the desktop grid (hidden sm:grid) are BOTH rendered in the DOM, so every product-card-{slug} / quick-add-{slug} testid appears twice. The hidden copies come first in DOM order with 0x0 bounding boxes, so any '.first' or plain data-testid selector resolves to a dead element and times out. Recommend rendering only one variant (useMediaQuery) or suffixing testids (e.g. -mobile / -desktop).",
+        "selector": "[data-testid^=\"product-card-\"], [data-testid^=\"quick-add-\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "SearchOverlay.jsx (line 36-40)",
+        "issue": "predictiveSearch() is wrapped in try/finally with NO catch block, so any API failure becomes an unhandled promise rejection (visible as a red CRA error overlay in dev). No user-facing error state for a failed search. Add a catch that surfaces a friendly 'Search unavailable' message.",
+        "selector": "[data-testid=\"search-input\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "Hero.jsx (line 92)",
+        "issue": "Invalid DOM attribute: fetchpriority=\"high\" should be fetchPriority=\"high\" in JSX. Logs a React warning on every homepage load.",
+        "selector": "Hero <img>",
+        "priority": "LOW"
+      },
+      {
+        "component": "CartDrawer.jsx",
+        "issue": "No Escape-key handler. Overlay click and the close button work, but Escape does not dismiss the drawer (SearchOverlay does implement Escape, so behaviour is inconsistent). A11y/UX gap for a modal dialog.",
+        "selector": "[data-testid=\"cart-drawer\"]",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Predictive search with regex metacharacter",
+        "issue": "Typing '(' (or '[', '*') into the search overlay results in a 500 from /api/search, an uncaught AxiosError, and no results/empty-state feedback to the shopper.",
+        "affected_selectors": ["[data-testid=\"search-input\"]", "[data-testid=\"search-empty\"]"]
+      },
+      {
+        "flow": "Order confirmation deep link",
+        "issue": "Navigating directly to /order/{orderNo} (no router state) shows the order number but the entire 'Order summary' block is omitted because no order-fetch API exists.",
+        "affected_selectors": ["[data-testid=\"order-confirmation\"]", "[data-testid=\"order-number\"]"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "Global",
+        "issues": [
+          "No horizontal overflow at 1920px or 390px on /, /shop, /products/:slug, /cart, /checkout, /about, /faq, /contact — verified clean.",
+          "INR formatting (Rs symbol + thousands separator) consistent across cards, PDP, drawer, cart, checkout and confirmation.",
+          "Free-shipping messaging present in announcement bar, trust strip, drawer, cart and checkout.",
+          "Minor: Checkout form placeholders (Aarav Sharma / you@email.com / 400001) are very low contrast against the white inputs; consider darkening the placeholder colour for readability.",
+          "Note (not a bug): quick-add buttons are intentionally hover-revealed on >=md (md:opacity-0 md:group-hover:opacity-100); automated tests must hover the card first."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "HIGH: Escape regex input with re.escape() in server.py get_products() (search param) and predictive_search() — currently returns 500 and crashes the search UI on '(', '[', '*', '+', '\\\\'.",
+    "MEDIUM: Add a catch block to SearchOverlay.jsx predictiveSearch call with a user-visible error state (prevents unhandled promise rejection).",
+    "MEDIUM: Fix duplicate data-testid on homepage ProductRail (mobile rail + desktop grid both in DOM) — render one variant or namespace the testids.",
+    "MEDIUM: Add GET /api/orders/{order_no} and have OrderConfirmation.jsx fall back to fetching it so deep links / refreshes show the order summary.",
+    "LOW: Add min_length validation to ContactIn.name and ContactIn.message (blank messages currently accepted with 200).",
+    "LOW: Rename fetchpriority -> fetchPriority in Hero.jsx line 92.",
+    "LOW: Add an Escape-key handler to CartDrawer for consistency with SearchOverlay."
+  ],
+  "critical_code_review_comments": [
+    "server.py:132-137 and 179-185 — user-controlled strings are concatenated into $regex. Beyond the 500, this is a ReDoS/regex-injection surface. Use re.escape() (and consider a MongoDB text index for real search).",
+    "SearchOverlay.jsx:36 — try/finally without catch swallows nothing and leaks the rejection; every network call in the app should have loading/success/error states. CartContext correctly does this; SearchOverlay does not.",
+    "ProductRail.jsx:31-44 — the same product list is rendered twice (mobile rail + desktop grid). This duplicates DOM nodes, duplicates data-testids, and double-loads product images on every breakpoint. Render conditionally instead.",
+    "server.py:309 — @app.on_event('startup') is deprecated in modern FastAPI; migrate to the lifespan context manager.",
+    "server.py — seed() upserts products on every boot but never removes stale products, so a renamed/removed seed slug lingers in the DB forever.",
+    "OrderConfirmation.jsx:10 — relying solely on location.state for order data makes the confirmation page non-shareable and non-refreshable across a cold load.",
+    "server.py add_item():205-208 — reads the cart, then insert_one(dict(cart)) then update_one; the read-modify-write is not atomic and could drop a concurrent line item. Consider a single upsert with array operators."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "91% (43/47 pytest cases)", "frontend": "~92% (all core flows pass; 2 medium defects: search 500 crash, duplicate testids)"},
+  "seed_data_creation": "No permanent seed data added. Tests create TEST_-prefixed carts, orders, contact messages and newsletter emails and delete them in test_zz_cleanup. Frontend e2e created one real order (GZ2608275BC906, QA Tester / qa.tester@example.com), one contact message and one newsletter signup (qa.newsletter@example.com) via the public UI.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "None required — guest storefront, no authentication. /app/memory/test_credentials.md not needed for this app.",
+  "context_for_next_testing_agent": "Run `pytest /app/backend/tests/backend_test.py -v` — 4 tests are intentional failing assertions documenting real defects: test_search_regex_special_chars_no_500 and test_products_search_regex_special_chars_no_500 (unescaped $regex -> 500), test_order_lookup_endpoint_exists (no GET /api/orders/{order_no}), test_contact_empty_strings_rejected (no min_length). They should pass once fixed. FRONTEND TESTING TIPS: (1) Homepage ProductRail duplicates every data-testid — always append ':visible' to product-card/quick-add selectors. (2) quick-add buttons are hover-revealed on desktop: hover the product card first, then click. (3) The cart drawer does NOT close on Escape — click [data-testid=\"cart-drawer-overlay\"] or [data-testid=\"cart-drawer-close\"] instead, otherwise the overlay intercepts subsequent clicks. (4) Cart identity lives in localStorage (gizmovo_cart_id), so each fresh browser context starts with an empty cart — add an item within the same session before visiting /checkout. (5) Verified-working testids: filter-all/filter-best/filter-{catslug}, sort-select (a BUTTON dropdown, not a <select>), shop-count, pdp-thumb-N, pdp-main-image, pdp-qty-inc/dec/value, pdp-add-to-cart, pdp-buy-now, variant-Colour-Charcoal/Beige, cart-page-subtotal, cartpage-{slug}-inc/dec/value, cart-page-remove-{slug}, cart-page-checkout-btn, checkout-full_name/email/phone/address1/address2/city/state/pincode, checkout-place-order, order-number, contact-name/email/message/submit/success, home-faq-accordion-item-N.",
+  "rca_of_the_issue": "PRIMARY (HIGH): /api/search and /api/products?search build MongoDB queries as {'$regex': search} using the raw query string (server.py lines 132-137 and 179-185). MongoDB compiles that value as a PCRE pattern, so an unbalanced metacharacter makes the server raise pymongo.errors.OperationFailure 'Regular expression is invalid: missing closing parenthesis' (code 51091, confirmed in /var/log/supervisor/backend.err.log), which FastAPI surfaces as a 500. Reproduction: GET /api/search?q=%28 -> 500, or type '(' into the navbar search overlay. The failure is amplified on the client because SearchOverlay.jsx wraps the call in try/finally without a catch, so the AxiosError becomes an unhandled promise rejection and renders the CRA red error overlay instead of a graceful empty state. Mitigation: re.escape() the term server-side (plus a catch + error UI client-side). SECONDARY (MEDIUM): ProductRail.jsx renders the product list twice (mobile snap-scroll rail at line 31 and desktop grid at line 40); Tailwind's sm:hidden/hidden-sm:grid only toggles display, so both copies stay in the DOM and every data-testid is duplicated with the hidden 0x0 copy appearing first — this is why naive data-testid selectors time out with 'element is not visible'."
+}

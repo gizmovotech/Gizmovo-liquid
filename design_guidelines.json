@@ -1,0 +1,104 @@
+{
+  "project_name": "GIZMOVO E-commerce",
+  "theme": "custom",
+  "description": "Premium, modern, young, slightly playful yet highly trustworthy e-commerce storefront. DTC/dropshipping but presented as a legitimate independent brand.",
+  "typography": {
+    "headings": "Outfit",
+    "body": "Inter",
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight",
+      "h3": "text-2xl sm:text-3xl tracking-tight",
+      "body_large": "text-lg sm:text-xl leading-relaxed",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm tracking-wide"
+    },
+    "instructions": "Do not load excessive font weights. Use Outfit (or Cabinet Grotesk) for headings to feel premium yet approachable. Use Inter for ultimate readability in product specs. Avoid enormous text that breaks on mobile."
+  },
+  "colors": {
+    "primary_navy": "#0F2740",
+    "navy": "#102A43",
+    "secondary_navy": "#173B5E",
+    "warm_beige": "#F4EBDD",
+    "cream": "#FBF7EE",
+    "soft_beige": "#E5D9C7",
+    "muted_gold": "#B88A4A",
+    "white": "#FFFFFF",
+    "forbidden_colors": ["green", "#00FF00", "neon", "cyan", "magenta", "#FF0000 (cheap discount red)", "#2563EB (generic SaaS blue)"],
+    "instructions": "Alternate section backgrounds to let the page breathe (e.g., Light Beige -> Navy -> Cream -> Navy CTA). Muted Gold is for VERY subtle accents only. Never use generic Shopify green for success/buttons; use Navy for primary trust actions."
+  },
+  "visual_enhancers": {
+    "shadows": "Subtle, diffused shadows only. Avoid harsh drop shadows. Use ring-1 ring-black/5 for subtle card borders on light backgrounds.",
+    "borders": "Use 1px borders in soft contrast (e.g., border-navy/10 on light, border-white/10 on dark).",
+    "corners": "Rounded-xl to rounded-2xl for a friendly, modern feel (like Apple/Nothing), but not overly bubbly.",
+    "textures": "Clean, flat but tactile surfaces. No heavy gradients, no cyberpunk aesthetics, no AI-generated slop."
+  },
+  "components": {
+    "navigation": "Clean, sticky header. Desktop: Logo, Shop, Best Sellers, Categories, About, Search, Account, Cart. Mobile: Accessible hamburger. Must have a solid or frosted glass background to prevent text collision over hero.",
+    "announcement_bar": "Slim, text-sm, tasteful 'Free shipping across India' messaging. Navy background, Cream text.",
+    "hero": "Cinematic. Editorial composition. Human headline. Primary CTA button. High-quality product lifestyle image. No fake urgency.",
+    "trust_strip": "Icons and short text below hero (e.g., Genuine Products, Fast Shipping, 1-Year Warranty). Use Lucide-react icons, clean.",
+    "product_card": "Image, brand/category overline, name, price, compare-at price, savings badge. Subtle desktop hover (image zoom or secondary image reveal). Wishlist and quick-add buttons. Touch-friendly hit areas on mobile.",
+    "sliding_cart": "Premium drawer. Instant feedback. Quantity controls (max 5). Empty state design.",
+    "product_page": "Large media gallery. Sticky purchase panel. Strong storytelling below the fold (benefits, specs, FAQ).",
+    "buttons": "Pill-shaped or rounded-full. Primary: bg-[#0F2740] text-white hover:bg-[#173B5E]. Secondary: bg-transparent border border-[#0F2740] text-[#0F2740]. Transition transforms on hover."
+  },
+  "grids": {
+    "homepage_layout": "Bento grids for category discovery (asymmetrical, mix of large and small cards). Carousel for best sellers.",
+    "product_grid": "grid-cols-2 on mobile (if cards are compact enough) or grid-cols-1, grid-cols-2 md:grid-cols-3 lg:grid-cols-4 on desktop.",
+    "spacing": "Generous spacing. gap-4 to gap-8 in grids. py-16 to py-24 for main sections."
+  },
+  "layouts": {
+    "mobile_first": true,
+    "instructions": "All designs must prioritize mobile viewing (Instagram Reels generation). Use stackable layouts, horizontal scroll containers for discovery without vertical fatigue, and bottom-sheet style menus where applicable."
+  },
+  "motion": {
+    "philosophy": "High-end intentional motion design. Cinematic hero entrance, magnetic CTAs, elegant hovers.",
+    "implementation": "Use Framer Motion. Keep transitions smooth and purposeful (e.g., duration 0.3s to 0.5s, ease-out).",
+    "accessibility": "Must respect prefers-reduced-motion."
+  },
+  "accessibility": {
+    "contrast": "Ensure text over images is readable (use gradients or overlays). Navy on Beige provides excellent contrast.",
+    "touch_targets": "Minimum 44x44px for all mobile interactive elements.",
+    "testing": "All interactive and key informational elements MUST include a data-testid attribute (e.g., data-testid='add-to-cart-btn')."
+  },
+  "media": {
+    "style": "Clean, bright, editorial, real, premium. Product imagery is the star.",
+    "icons": "lucide-react. Coherent, thin-to-medium stroke. NO emoji as UI icons."
+  },
+  "image_urls": {
+    "hero_lifestyle": {
+      "url": "https://images.unsplash.com/photo-1758979792186-32a5da91f24d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzV8MHwxfHNlYXJjaHw0fHxwcmVtaXVtJTIwbW9kZXJuJTIwbGlmZXN0eWxlJTIwcHJvZHVjdHxlbnwwfHx8fDE3ODc4MDU3OTR8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Silver macbook pro in its box - minimal premium unboxing vibe"
+    },
+    "category_gadget": {
+      "url": "https://images.unsplash.com/photo-1639413665566-2f75adf7b7ca?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwbW9kZXJuJTIwZ2FkZ2V0JTIwZGVza3xlbnwwfHx8fDE3ODc4MDU3OTB8MA&ixlib=rb-4.1.0&q=85",
+      "description": "minimal computer monitor setup - for workspace tech category"
+    },
+    "lifestyle_context": {
+      "url": "https://images.unsplash.com/photo-1648475236583-2e25a6cbf3bd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzV8MHwxfHNlYXJjaHwxfHxwcmVtaXVtJTIwbW9kZXJuJTIwbGlmZXN0eWxlJTIwcHJvZHVjdHxlbnwwfHx8fDE3ODc4MDU3OTR8MA&ixlib=rb-4.1.0&q=85",
+      "description": "premium living room context for smart home gadgets"
+    },
+    "desk_setup": {
+      "url": "https://images.unsplash.com/photo-1587522384446-64daf3e2689a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwbW9kZXJuJTIwZ2FkZ2V0JTIwZGVza3xlbnwwfHx8fDE3ODc4MDU3OTB8MA&ixlib=rb-4.1.0&q=85",
+      "description": "black flat screen computer monitor on white wooden desk - clean aesthetic"
+    }
+  },
+  "instructions_to_main_agent": {
+    "setup": "Use standard HTML/Tailwind for marketing/landing sections. Use Shadcn components for forms, dialogs, drawers, and tabs (configured for JS, not TSX).",
+    "styling": "Do NOT use generic templates. Apply the specific Navy/Beige color palette heavily. Prioritize negative space (padding).",
+    "pages_to_build": ["Homepage", "Product Listing / Category", "Product Detail Page (PDP)", "About", "FAQ", "Cart (Drawer & Page)", "Checkout Summary", "404/Empty States"],
+    "components_to_build": ["Announcement Bar", "Navigation", "Hero", "Trust Strip", "Product Carousel", "Bento Categories", "Storytelling section", "Footer", "Sliding Cart Drawer", "Search Overlay"],
+    "tech_stack": "React (.jsx/.js files), Tailwind CSS, Framer Motion, Lucide React, Shadcn/UI (JS version)"
+  },
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "anti_slop": "Do not create generic centered layouts, simplistic gradients, or uniform styling. Create depth through layered design elements and z-index hierarchy.",
+    "interactions": "Every interaction needs micro-animations - hover states, transitions, entrance animations. Static = dead.",
+    "spacing": "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "icons": "NEVER use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 for icons. Use lucide-react.",
+    "images": "Use the provided image URLs. NEVER use placeholder text for images or logos.",
+    "testing": "Ensure all actionable elements have data-testid attributes.",
+    "alignment": "Do not apply universal text-align: center on app containers. Align naturally.",
+    "transitions": "Do not use 'transition-all'. Use specific transition properties (e.g. transition-colors, transition-transform) to avoid breaking transform animations."
+  }
+}
