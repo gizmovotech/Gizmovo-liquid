@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, imgUrl } from "@/lib/format";
 import QuantityStepper from "@/components/QuantityStepper";
 import { Trash2, ShoppingBag, Truck, ArrowRight, ArrowLeft } from "lucide-react";
 import { BRAND } from "@/lib/config";
@@ -35,7 +35,7 @@ export default function CartPage() {
             {items.map((it) => (
               <li key={it.item_id} className="flex gap-4 py-6" data-testid={`cart-page-item-${it.slug}`}>
                 <Link to={`/products/${it.slug}`} className="h-28 w-24 shrink-0 overflow-hidden rounded-2xl bg-white ring-1 ring-navy-900/5">
-                  <img src={it.image} alt={it.name} loading="lazy" className="h-full w-full object-cover" />
+                  <img src={imgUrl(it.image, 220)} alt={it.name} loading="lazy" className="h-full w-full object-cover" />
                 </Link>
                 <div className="flex flex-1 flex-col">
                   <div className="flex justify-between gap-3">

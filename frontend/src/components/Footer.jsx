@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BRAND } from "@/lib/config";
 import { subscribeNewsletter } from "@/lib/api";
 import { toast } from "sonner";
+import PaymentBadges from "@/components/PaymentBadges";
 import { Instagram, Mail, ArrowRight } from "lucide-react";
 
 const COLUMNS = [
@@ -139,9 +140,14 @@ export default function Footer() {
               <Mail className="h-4 w-4" /> {BRAND.supportEmail}
             </a>
           </div>
+          <PaymentBadges dark />
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3 border-t border-cream/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-cream/40">
             © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
           </p>
+          <p className="text-xs text-cream/40">Made in India · Shipped free across India</p>
         </div>
       </div>
     </footer>

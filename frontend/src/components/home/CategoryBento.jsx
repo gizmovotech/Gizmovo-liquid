@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
+import { imgUrl } from "@/lib/format";
 
 // Editorial bento grid of categories.
 export default function CategoryBento({ categories }) {
@@ -16,7 +17,7 @@ export default function CategoryBento({ categories }) {
       }`}
     >
       <img
-        src={cat.image}
+        src={imgUrl(cat.image, large ? 900 : 600)}
         alt={cat.name}
         loading="lazy"
         className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-700 ease-out group-hover:scale-105"

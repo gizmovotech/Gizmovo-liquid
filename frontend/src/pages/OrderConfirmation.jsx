@@ -1,7 +1,7 @@
 import { useLocation, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, imgUrl } from "@/lib/format";
 import { getOrder } from "@/lib/api";
 import { BRAND } from "@/lib/config";
 import { Check, Package, Mail, ArrowRight } from "lucide-react";
@@ -47,7 +47,7 @@ export default function OrderConfirmation() {
               {order.items.map((it) => (
                 <li key={it.item_id} className="flex items-center gap-4 py-4">
                   <div className="h-16 w-14 shrink-0 overflow-hidden rounded-xl bg-cream">
-                    <img src={it.image} alt={it.name} className="h-full w-full object-cover" />
+                    <img src={imgUrl(it.image, 120)} alt={it.name} className="h-full w-full object-cover" />
                   </div>
                   <div className="flex-1">
                     <p className="font-display text-sm font-semibold text-navy-900">{it.name}</p>

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, imgUrl } from "@/lib/format";
 import { checkout } from "@/lib/api";
 import { toast } from "sonner";
 import { Spinner } from "@/components/Loaders";
+import PaymentBadges from "@/components/PaymentBadges";
 import { Lock, ArrowLeft, ShieldCheck, Truck } from "lucide-react";
 
 const FIELDS = [
@@ -94,6 +95,7 @@ export default function Checkout() {
               For now, placing the order creates it in <span className="font-semibold">pending payment</span> status
               so you can wire up your live payment provider.
             </p>
+            <PaymentBadges className="mt-4" />
           </div>
 
           <button type="submit" disabled={busy} data-testid="checkout-place-order" className="btn-primary mt-6 w-full text-base">
@@ -112,7 +114,7 @@ export default function Checkout() {
               {items.map((it) => (
                 <li key={it.item_id} className="flex gap-3">
                   <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-xl bg-cream">
-                    <img src={it.image} alt={it.name} className="h-full w-full object-cover" />
+                    <img src={imgUrl(it.image, 120)} alt={it.name} className="h-full w-full object-cover" />
                     <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-navy-900 px-1 text-[10px] font-bold text-cream">
                       {it.quantity}
                     </span>

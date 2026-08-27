@@ -1,0 +1,57 @@
+{
+  "summary": "VERIFICATION run (iteration 2) of GIZMOVO storefront. Backend: 47 existing pytest cases (backend_test.py) now 47/47 PASS — all 4 iteration-1 defects (regex 500 on /api/search & /api/products?search, missing GET /api/orders/{order_no}, contact blank-field validation) are fixed. Added 25 new cases in test_verification_iter2.py covering out-of-stock enforcement, regex metacharacter hardening, categories, checkout->order deep-link, MAX_QTY=5 and contact validation — 25/25 PASS (backend 72/72 = 100%). Frontend: verified every requested item end-to-end at 1920/1440/390px — sold-out states (shop + PDP), categories dropdown, cart cross-sell, payment badges (checkout + footer), mobile sticky buy bar, search overlay incl. regex metacharacter graceful empty state, full guest purchase flow (order GZ260827B02566 placed, cart cleared), cold deep-link order confirmation now renders full summary, contact form, FAQ accordion, 404, Escape-to-close drawer, qty cap 5, no duplicate data-testids on homepage, zero horizontal overflow, zero broken images, zero console/page errors. ONE new defect found: the navbar Categories trigger closes the dropdown on a plain mouse click (hover opens it, then onClick toggles it shut).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Navbar.jsx (lines 57-65)",
+        "issue": "Categories dropdown cannot be opened by CLICKING. The wrapper has onMouseEnter={() => setCatOpen(true)} and the trigger has onClick={() => setCatOpen((o) => !o)}. A real mouse click always fires mouseenter first (open=true), then the click toggles it back to false — so the panel flashes open and immediately closes. Only pure hover (or keyboard Enter without a pointer) works. Verified: page.hover -> dropdown appears; page.click -> dropdown count = 0. Fix: make the trigger onClick set open unconditionally (setCatOpen(true)) or remove the hover-open and use click + outside-click/Escape handling.",
+        "selector": "[data-testid=\"nav-categories\"] / [data-testid=\"categories-dropdown\"]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Global (1920px, 1440px, 390px)",
+        "issues": [
+          "No horizontal overflow on /, /shop, /products/:slug (in-stock and sold-out), /checkout, /cart, /contact, /faq, /404 at 390px and 1440px — clean.",
+          "All 21 images on /shop load (0 broken) with the new imgUrl downscaling; PDP/cart/upsell thumbnails render.",
+          "Mobile sticky bar is correctly pinned to the bottom (y+h == viewport height) and hidden on desktop; for the sold-out product it renders as a disabled 'Sold out' bar with no pdp-sticky-add — correct.",
+          "Minor: the 'added to bag' toast renders bottom-right over the footer/newsletter area on the order-confirmation page; readable but slightly overlaps footer content.",
+          "Carry-over from iteration 1 (still present): checkout input placeholders (Aarav Sharma / you@email.com / 400001) are low contrast on white."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/backend/tests/test_verification_iter2.py",
+    "/app/test_reports/pytest/pytest_results.xml",
+    "/app/test_reports/pytest/pytest_iter2.xml"
+  ],
+  "action_items": [
+    "MEDIUM: Fix Navbar Categories trigger so a mouse CLICK opens (not closes) the dropdown — hover-open + click-toggle currently cancel each other out. Hover and mobile menu paths work fine."
+  ],
+  "critical_code_review_comments": [
+    "Navbar.jsx:57-65 — combining onMouseEnter open with a click toggle on the same element is inherently conflicting on pointer devices; use hover-open + click-open (never toggle) or a single controlled pattern.",
+    "server.py:320 — @app.on_event('startup')/'shutdown' remain deprecated; migrate to the FastAPI lifespan context manager.",
+    "server.py:208-229 add_item() — read-modify-write on carts.items is still non-atomic (find_one, then insert_one, then update_one); concurrent adds from two tabs can drop a line. Use a single upsert with $push/$set array filters.",
+    "server.py seed() upserts products on every boot but never prunes removed slugs, so stale products persist in the DB.",
+    "CartDrawer.jsx:23-27 — upsell recs are fetched once and cached in state keyed on recs.length, so if the fetch fails it retries forever on every open; consider a 'loaded' flag.",
+    "Out-of-stock is enforced on POST /api/cart/items but NOT re-validated in POST /api/checkout — an item that goes out of stock while sitting in a cart can still be ordered. Recommend re-checking availability at checkout."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_verification_iter2.py"
+  ],
+  "success_rate": {"backend": "100% (72/72 pytest cases)", "frontend": "~97% (all requested flows pass; 1 medium dropdown click defect)"},
+  "seed_data_creation": "No permanent seed data. Pytest data is TEST_-prefixed and removed in test_zz_cleanup / test_zz_cleanup_iter2. UI e2e created real public-facing records: order GZ260827B02566 (QA Verify Two / qa.verify2@example.com), one contact message and no newsletter signup.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "None required — guest storefront, no auth.",
+  "context_for_next_testing_agent": "Backend: run `pytest /app/backend/tests/ -q` — 72/72 green as of iteration 2; test_verification_iter2.py covers out-of-stock (400 + cart stays empty), regex metacharacters ((,[,*,+,\\\\,?,^$) returning 200, 5 categories with non-empty product sets, checkout -> GET /api/orders/{order_no} deep link (no _id leak), MAX_QTY=5 on POST and PUT, contact 422 on blank/1-char fields. Frontend tips that WORK: homepage no longer duplicates data-testids (verified programmatically); quick-add is hover-revealed on >=md so call card.hover() first; Escape now closes the cart drawer; drawer qty inc becomes disabled at 5; cart-upsell renders exactly 2 best-sellers excluding in-cart items, add via upsell-add-{slug}; payment-badges appears twice on /checkout (section + footer) — use .first; on mobile 390px use pdp-sticky-bar / pdp-sticky-add; sold-out product is trek-air-pump (soldout-trek-air-pump on shop, pdp-sold-out on PDP, no add/buy/sticky-add). IMPORTANT: to open the desktop Categories dropdown in Playwright you must HOVER nav-categories (a click closes it — open bug), or use the mobile menu (mobile-nav-categories -> mobile-cat-{slug}).",
+  "rca_of_the_issue": "Navbar categories dropdown: the container <div className=\"relative\" onMouseEnter={() => setCatOpen(true)} onMouseLeave={() => setCatOpen(false)}> opens the panel as soon as the pointer enters. The inner button additionally does onClick={() => setCatOpen((o) => !o)}. Because a pointer click is always preceded by mouseenter, state is already true when the click handler runs, so the toggle sets it to false and the dropdown closes instantly. Reproduction: Playwright page.click('[data-testid=\"nav-categories\"]') -> categories-dropdown never becomes visible; page.hover(...) -> it appears and nav-cat-* navigation to /collections/{slug} filters the grid correctly (verified: audio = 2 products, desk = 3 products). Mitigation: change the button handler to setCatOpen(true) (or drop hover-open in favour of click-open with an outside-click listener)."
+}

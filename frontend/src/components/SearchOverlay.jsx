@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X, ArrowUpRight } from "lucide-react";
 import { predictiveSearch } from "@/lib/api";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, imgUrl } from "@/lib/format";
+import { Spinner } from "@/components/Loaders";
 
 const SUGGESTIONS = ["Wireless charger", "Earbuds", "Desk", "Travel", "Power bank"];
 
@@ -75,9 +76,11 @@ export default function SearchOverlay({ open, onClose }) {
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder="Search products, categories…"
+                  aria-label="Search products and categories"
                   data-testid="search-input"
-                  className="w-full bg-transparent text-base text-navy-900 placeholder:text-navy-900/40 focus:outline-none"
+                  className="w-full bg-transparent text-base text-navy-900 placeholder:text-navy-900/45 focus:outline-none"
                 />
+                {loading && <Spinner className="h-4 w-4 shrink-0" />}
               </div>
               <button
                 onClick={onClose}
@@ -162,7 +165,7 @@ export default function SearchOverlay({ open, onClose }) {
                           className="group flex items-center gap-4 rounded-2xl border border-navy-900/10 bg-white p-3 transition-colors hover:border-navy-900/30"
                         >
                           <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-cream">
-                            <img src={p.images[0]} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
+                            <img src={imgUrl(p.images[0], 160)} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <p className="overline">{p.category}</p>

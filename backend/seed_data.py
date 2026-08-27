@@ -20,7 +20,7 @@ CAT_NAME = {c["slug"]: c["name"] for c in CATEGORIES}
 
 def _p(position, slug, name, tagline, category_slug, price, compare_at, images,
        short_benefit, description, story, benefits, how_it_works, specs, whats_included,
-       variants=None, badge=None, best_seller=False, related=None):
+       variants=None, badge=None, best_seller=False, related=None, available=True):
     return {
         "id": str(uuid.uuid5(uuid.NAMESPACE_URL, "gizmovo/" + slug)),
         "position": position,
@@ -42,7 +42,7 @@ def _p(position, slug, name, tagline, category_slug, price, compare_at, images,
         "variants": variants or [],
         "badge": badge,
         "best_seller": best_seller,
-        "available": True,
+        "available": available,
         "rating": None,
         "review_count": 0,
         "related": related or [],
@@ -215,5 +215,5 @@ PRODUCTS = [
        ["Pick your target pressure", "Attach the nozzle", "Press start — it stops on its own"],
        [{"label": "Battery", "value": "Rechargeable"}, {"label": "Max pressure", "value": "150 PSI"}, {"label": "Charging", "value": "USB-C"}],
        ["Trek pump", "Nozzle set", "USB-C cable", "Pouch"],
-       related=["peak-power-bank", "volt-gan-charger"]),
+       related=["peak-power-bank", "volt-gan-charger"], available=False),
 ]

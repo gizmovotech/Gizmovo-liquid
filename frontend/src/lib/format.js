@@ -19,3 +19,19 @@ export function savingsPercent(price, compareAt) {
   if (!compareAt || compareAt <= price) return 0;
   return Math.round(((compareAt - price) / compareAt) * 100);
 }
+
+// Downscale remote images per usage context to save bandwidth on mobile.
+export function imgUrl(url, w = 800) {
+  if (!url) return url;
+  if (url.includes("images.unsplash.com")) {
+    return /([?&])w=\d+/.test(url)
+      ? url.replace(/([?&])w=\d+/, `$1w=${w}`)
+      : `${url}&w=${w}`;
+  }
+  if (url.includes("images.pexels.com")) {
+    return /([?&])w=\d+/.test(url)
+      ? url.replace(/([?&])w=\d+/, `$1w=${w}`)
+      : `${url}&w=${w}`;
+  }
+  return url;
+}

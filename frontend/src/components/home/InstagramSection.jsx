@@ -1,6 +1,7 @@
 import { Instagram, ArrowUpRight } from "lucide-react";
 import { BRAND } from "@/lib/config";
 import { Reveal } from "@/components/Reveal";
+import { imgUrl } from "@/lib/format";
 
 // Placeholder tiles — wire real posts / Shopify Instagram feed here later.
 const TILES = [
@@ -47,7 +48,7 @@ export default function InstagramSection() {
               aria-label="View on Instagram"
             >
               <img
-                src={src}
+                src={imgUrl(src, 500)}
                 alt="Gizmovo community"
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

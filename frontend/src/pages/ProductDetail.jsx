@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProduct } from "@/lib/api";
-import { formatMoney, savingsPercent } from "@/lib/format";
+import { formatMoney, savingsPercent, imgUrl } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
 import QuantityStepper from "@/components/QuantityStepper";
 import ProductCard from "@/components/ProductCard";
@@ -54,6 +54,7 @@ export default function ProductDetail() {
     );
 
   const saving = savingsPercent(product.price, product.compare_at_price);
+  const soldOut = product.available === false;
   const variantLabel = Object.values(variant).join(" · ") || null;
 
   const handleAdd = ({ openDrawer = true } = {}) =>
@@ -70,7 +71,7 @@ export default function ProductDetail() {
   const specs = product.specs || [];
 
   return (
-    <div data-testid="product-detail">
+    <div data-testid="product-detail" className="pb-24 lg:pb-0">
       {/* Breadcrumb */}
       <div className="container-gizmo pt-6">
         <nav className="flex items-center gap-1.5 text-xs text-navy-900/50" aria-label="Breadcrumb">
@@ -89,7 +90,7 @@ export default function ProductDetail() {
           <div className="aspect-square overflow-hidden rounded-3xl bg-white ring-1 ring-navy-900/5">
             <img
               key={activeImg}
-              src={product.images[activeImg]}
+              src={imgUrl(product.images[activeImg], 1000)}
               alt={product.name}
               className="h-full w-full object-cover"
               data-testid="pdp-main-image"
@@ -107,7 +108,7 @@ export default function ProductDetail() {
                     activeImg === i ? "ring-navy-900" : "ring-transparent hover:ring-navy-900/30"
                   }`}
                 >
-                  <img src={img} alt="" className="h-full w-full object-cover" />
+                  <img src={imgUrl(img, 160)} alt="" className="h-full w-full object-cover" />
                 </button>
               ))}
             </div>
@@ -145,7 +146,11 @@ export default function ProductDetail() {
               </>
             )}
           </div>
-          <p className="mt-1.5 text-sm text-navy-900/50">Free shipping · Taxes included</p>
+          <p className="mt-1.5 text-sm text-navy-900/55">Free shipping · Taxes included</p>
+          <p className="mt-3 flex items-center gap-2 text-sm font-medium text-navy-900" data-testid="pdp-delivery">
+            <Truck className="h-4 w-4 text-gold" />
+            {soldOut ? "Currently out of stock" : "Ships in 24–48 hrs · Free delivery across India"}
+          </p>
 
           {/* Variants */}
           {(product.variants || []).map((v) => (
@@ -180,26 +185,37 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-6 flex flex-col gap-3">
-            <button
-              onClick={() => handleAdd()}
-              disabled={addingId === product.id || !product.available}
-              data-testid="pdp-add-to-cart"
-              className="btn-primary w-full text-base"
-            >
-              {addingId === product.id ? (
-                <><Check className="h-5 w-5" /> Added to bag</>
-              ) : (
-                <><ShoppingBag className="h-5 w-5" /> Add to bag</>
-              )}
-            </button>
-            <button
-              onClick={handleBuyNow}
-              disabled={buying || !product.available}
-              data-testid="pdp-buy-now"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-navy-900 bg-transparent px-7 py-3.5 text-base font-semibold text-navy-900 transition-colors hover:bg-navy-900 hover:text-cream disabled:opacity-50"
-            >
-              {buying ? <Spinner /> : <Zap className="h-5 w-5" />} Buy it now
-            </button>
+            {soldOut ? (
+              <div
+                data-testid="pdp-sold-out"
+                className="w-full rounded-full bg-navy-900/10 px-7 py-4 text-center text-base font-semibold text-navy-900/60"
+              >
+                Sold out — check back soon
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => handleAdd()}
+                  disabled={addingId === product.id}
+                  data-testid="pdp-add-to-cart"
+                  className="btn-primary w-full text-base"
+                >
+                  {addingId === product.id ? (
+                    <><Check className="h-5 w-5" /> Added to bag</>
+                  ) : (
+                    <><ShoppingBag className="h-5 w-5" /> Add to bag</>
+                  )}
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  disabled={buying}
+                  data-testid="pdp-buy-now"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-navy-900 bg-transparent px-7 py-3.5 text-base font-semibold text-navy-900 transition-colors hover:bg-navy-900 hover:text-cream disabled:opacity-50"
+                >
+                  {buying ? <Spinner /> : <Zap className="h-5 w-5" />} Buy it now
+                </button>
+              </>
+            )}
           </div>
 
           {/* Trust row */}
@@ -323,6 +339,33 @@ export default function ProductDetail() {
           </div>
         </section>
       )}
+
+      {/* Sticky mobile buy bar */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-navy-900/10 bg-cream/95 px-4 py-3 backdrop-blur-lg lg:hidden" data-testid="pdp-sticky-bar">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs text-navy-900/60">{product.name}</p>
+            <div className="flex items-center gap-2">
+              <span className="font-display text-lg font-bold text-navy-900">{formatMoney(product.price)}</span>
+              {product.compare_at_price > product.price && (
+                <span className="text-xs text-navy-900/50 line-through">{formatMoney(product.compare_at_price)}</span>
+              )}
+            </div>
+          </div>
+          {soldOut ? (
+            <span className="rounded-full bg-navy-900/10 px-6 py-3 text-sm font-semibold text-navy-900/60">Sold out</span>
+          ) : (
+            <button
+              onClick={() => handleAdd()}
+              disabled={addingId === product.id}
+              data-testid="pdp-sticky-add"
+              className="btn-primary flex-shrink-0"
+            >
+              {addingId === product.id ? <><Check className="h-4 w-4" /> Added</> : <><ShoppingBag className="h-4 w-4" /> Add to bag</>}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -130,7 +130,7 @@ export default function Shop() {
             <Select value={sort} onValueChange={setSort}>
               <SelectTrigger
                 data-testid="sort-select"
-                className="h-9 w-[170px] rounded-full border-navy-900/15 bg-white text-sm"
+                className="h-9 w-[130px] rounded-full border-navy-900/15 bg-white text-sm sm:w-[170px]"
               >
                 <SelectValue />
               </SelectTrigger>

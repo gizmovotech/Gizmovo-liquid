@@ -94,15 +94,22 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/40 to-transparent" />
             </div>
-            {/* Floating card */}
+            {/* Floating credibility card */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.5, ease }}
-              className="absolute -bottom-5 left-4 rounded-2xl bg-cream/95 p-4 shadow-xl backdrop-blur sm:left-6"
+              className="absolute -bottom-4 left-3 flex items-center gap-3 rounded-2xl bg-cream/95 px-4 py-3 shadow-xl backdrop-blur sm:left-6"
             >
-              <p className="font-display text-2xl font-bold text-navy-900">10+</p>
-              <p className="text-xs text-navy-900/60">carefully chosen products</p>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-900">
+                <Sparkles className="h-4 w-4 text-gold" />
+              </span>
+              <div>
+                <p className="font-display text-sm font-bold leading-tight text-navy-900">
+                  Handpicked, not dropshipped
+                </p>
+                <p className="text-xs text-navy-900/60">A small, curated catalog</p>
+              </div>
             </motion.div>
           </div>
         </motion.div>

@@ -1,22 +1,33 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, ShoppingBag, Trash2, Truck, ArrowRight } from "lucide-react";
+import { X, ShoppingBag, Trash2, Truck, ArrowRight, Plus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { formatMoney } from "@/lib/format";
+import { getProducts } from "@/lib/api";
+import { formatMoney, imgUrl } from "@/lib/format";
 import { BRAND } from "@/lib/config";
 import QuantityStepper from "@/components/QuantityStepper";
 
 export default function CartDrawer() {
-  const { cart, drawerOpen, setDrawerOpen, updateQty, removeItem } = useCart();
+  const { cart, drawerOpen, setDrawerOpen, updateQty, removeItem, addItem, addingId } = useCart();
   const navigate = useNavigate();
   const items = cart.items || [];
+  const [recs, setRecs] = useState([]);
 
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setDrawerOpen(false);
     if (drawerOpen) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [drawerOpen, setDrawerOpen]);
+
+  useEffect(() => {
+    if (drawerOpen && recs.length === 0) {
+      getProducts({ best_seller: true }).then(setRecs).catch(() => {});
+    }
+  }, [drawerOpen, recs.length]);
+
+  const inCart = new Set(items.map((i) => i.slug));
+  const upsell = recs.filter((p) => !inCart.has(p.slug) && p.available !== false).slice(0, 2);
 
   const goToCheckout = () => {
     setDrawerOpen(false);
@@ -43,6 +54,7 @@ export default function CartDrawer() {
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             role="dialog"
+            aria-modal="true"
             aria-label="Shopping bag"
           >
             <div className="flex items-center justify-between border-b border-navy-900/10 px-6 py-5">
@@ -104,7 +116,7 @@ export default function CartDrawer() {
                           className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-white"
                         >
                           <img
-                            src={it.image}
+                            src={imgUrl(it.image, 200)}
                             alt={it.name}
                             loading="lazy"
                             className="h-full w-full object-cover"
@@ -150,6 +162,34 @@ export default function CartDrawer() {
                       </li>
                     ))}
                   </ul>
+
+                  {upsell.length > 0 && (
+                    <div className="mt-6 border-t border-navy-900/10 pt-5" data-testid="cart-upsell">
+                      <p className="overline">You may also like</p>
+                      <ul className="mt-3 space-y-2.5">
+                        {upsell.map((p) => (
+                          <li key={p.slug} className="flex items-center gap-3" data-testid={`upsell-${p.slug}`}>
+                            <Link to={`/products/${p.slug}`} onClick={() => setDrawerOpen(false)} className="h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-white">
+                              <img src={imgUrl(p.images[0], 120)} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
+                            </Link>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate font-display text-sm font-semibold text-navy-900">{p.name}</p>
+                              <p className="text-sm text-navy-900/60">{formatMoney(p.price)}</p>
+                            </div>
+                            <button
+                              onClick={() => addItem(p, { openDrawer: false })}
+                              disabled={addingId === p.id}
+                              data-testid={`upsell-add-${p.slug}`}
+                              aria-label={`Add ${p.name} to bag`}
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-navy-900/20 text-navy-900 transition-colors hover:bg-navy-900 hover:text-cream disabled:opacity-50"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-t border-navy-900/10 bg-white/60 px-6 py-5">

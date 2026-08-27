@@ -289,6 +289,10 @@ async def checkout(inp: CheckoutIn):
     cart = await build_cart(inp.cart_id)
     if not cart["items"]:
         raise HTTPException(status_code=400, detail="Your cart is empty")
+    for it in cart["items"]:
+        prod = await db.products.find_one({"id": it["product_id"]}, {"_id": 0})
+        if not prod or not prod.get("available", True):
+            raise HTTPException(status_code=400, detail=f"{it['name']} is no longer available")
     order_no = "GZ" + datetime.now(timezone.utc).strftime("%y%m%d") + uuid.uuid4().hex[:6].upper()
     order = {
         "id": str(uuid.uuid4()),
